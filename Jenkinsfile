@@ -29,6 +29,13 @@ pipeline {
             # au minimum pour lancer les tests
             pip install pytest
           fi
+
+          # Installer les dépendances de développement (pytest)
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          else
+            pip install pytest
+          fi
         '''
       }
     }
