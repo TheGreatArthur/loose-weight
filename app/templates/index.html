@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FitTrack – Suivi IMC</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .card {
+        background: white;
+        width: 420px;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 25px;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        color: #444;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .btn-calc {
+        background: #4facfe;
+        color: white;
+      }
+
+      .btn-pdf {
+        background: #00c853;
+        color: white;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      .result {
+        margin-top: 25px;
+        padding: 15px;
+        background: #f5f7fa;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .result p {
+        margin: 8px 0;
+        font-size: 15px;
+      }
+
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+      }
+
+      .history {
+        margin-top: 30px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .history h3 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .entry {
+        background: #f9f9f9;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-left: 4px solid #4facfe;
+        border-radius: 4px;
+        font-size: 13px;
+      }
+
+      .entry strong {
+        color: #0099ff;
+      }
+
+      .entry .date {
+        font-size: 11px;
+        color: #999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>FitTrack</h1>
+      <div class="subtitle">Application de suivi IMC</div>
+
+      <form method="post">
+        <label>Nom</label>
+        <input type="text" name="nom" required placeholder="Votre nom" />
+
+        <label>Poids (kg)</label>
+        <input type="number" step="0.1" name="poids" required />
+
+        <label>Taille (m)</label>
+        <input type="number" step="0.01" name="taille" required />
+
+        <div class="buttons">
+          <button class="btn-calc" type="submit">Calculer IMC</button>
+          <button class="btn-pdf" type="submit" name="pdf">Générer PDF</button>
+        </div>
+      </form>
+
+      {% if imc %}
+      <div class="result">
+        <p><strong>IMC :</strong> {{ imc }}</p>
+        <p><strong>Catégorie :</strong> {{ categorie }}</p>
+      </div>
+      {% endif %} {% if entries %}
+      <div class="history">
+        <h3>📊 Historique</h3>
+        {% for entry in entries %}
+        <div class="entry">
+          <strong>{{ entry.nom }}</strong> - IMC: {{ entry.imc }} ({{
+          entry.categorie_imc }})<br />
+          Poids: {{ entry.poids }}kg | Taille: {{ entry.taille }}m<br />
+          <span class="date">{{ entry.date }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="footer">Projet DevOps – M1 Informatique</div>
+    </div>
+  </body>
+</html>
