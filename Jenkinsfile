@@ -54,7 +54,7 @@ pipeline {
   post {
     always {
       junit allowEmptyResults: true, testResults: 'pytest-report.xml'
-      archiveArtifacts artifacts: 'pytest-report.xml', fingerprint: true
+      archiveArtifacts artifacts: 'pytest-report.xml,pipeline-output.txt', fingerprint: true
     }
   }
 }
