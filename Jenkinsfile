@@ -44,7 +44,8 @@ pipeline {
       steps {
         sh '''
           . .venv/bin/activate
-          pytest -q --junitxml=pytest-report.xml
+          # afficher la sortie standard du test pipeline (print) pour voir les RAW_INPUT et FLASH_MESSAGE
+          pytest -s -q --junitxml=pytest-report.xml
         '''
       }
     }
