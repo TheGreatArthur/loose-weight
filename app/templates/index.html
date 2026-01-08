@@ -130,6 +130,16 @@
         font-size: 11px;
         color: #999;
       }
+      .flash {
+        background: #e6ffed;
+        border: 1px solid #b2f2bb;
+        color: #2d7a3e;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        text-align: center;
+        font-weight: bold;
+      }
     </style>
   </head>
 
@@ -138,8 +148,12 @@
       <h1>FitTrack</h1>
       <div class="subtitle">Application de suivi IMC</div>
 
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flash">{% for m in messages %}{{ m }}{% endfor %}</div>
+      {% endif %} {% endwith %}
+
       <form method="post">
-        <label>Nom</label>
+        <label>Prénom</label>
         <input type="text" name="nom" required placeholder="Votre nom" />
 
         <label>Poids (kg)</label>
@@ -175,5 +189,24 @@
 
       <div class="footer">Projet DevOps – M1 Informatique</div>
     </div>
+</div>
+
+    <script>
+      // Cacher automatiquement le message flash après 4 secondes
+      (function() {
+        try {
+          const flash = document.querySelector('.flash');
+          if (!flash) return;
+          setTimeout(() => {
+            flash.style.transition = 'opacity 0.6s ease, max-height 0.6s ease';
+            flash.style.opacity = '0';
+            flash.style.maxHeight = '0';
+            setTimeout(() => flash.remove(), 700);
+          }, 4000);
+        } catch (e) {
+          // ignore in older browsers
+        }
+      })();
+    </script>
   </body>
 </html>

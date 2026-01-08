@@ -36,11 +36,40 @@ def add_entry(nom, poids, taille, imc, categorie):
     cursor = conn.cursor()
     
     today = datetime.now().strftime("%Y-%m-%d")
-    
-    cursor.execute("""
-        INSERT INTO weight_logs (nom, date, poids, taille, imc, categorie_imc)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (nom, today, poids, taille, imc, categorie))
+    # Vérifier si un enregistrement existe déjà pour ce nom (la plus récente)
+    cursor.execute(
+        """
+        SELECT id FROM weight_logs WHERE nom = ? ORDER BY date DESC LIMIT 1
+        """,
+        (nom,)
+    )
+    row = cursor.fetchone()
+
+    updated = False
+    if row:
+        # Mettre à jour l'entrée existante
+        entry_id = row[0]
+        cursor.execute(
+            """
+            UPDATE weight_logs
+            SET date = ?, poids = ?, taille = ?, imc = ?, categorie_imc = ?
+            WHERE id = ?
+            """,
+            (today, poids, taille, imc, categorie, entry_id)
+        )
+        updated = True
+    else:
+        # Insérer une nouvelle entrée si aucun nom existant
+        cursor.execute("""
+            INSERT INTO weight_logs (nom, date, poids, taille, imc, categorie_imc)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (nom, today, poids, taille, imc, categorie))
+
+    conn.commit()
+    conn.close()
+
+    # Retourner True si on a mis à jour une entrée existante, sinon False
+    return updated
     
     conn.commit()
     conn.close()
